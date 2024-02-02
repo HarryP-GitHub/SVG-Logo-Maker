@@ -39,7 +39,7 @@ const { Triangle, Circle, Square } = require('./lib/shapes');
                 validate: (input) => 
                 input !== '' ||
                 'Please enter a colour for the shape.'
-            },
+            }
         ]);
 
             let shape;
@@ -57,6 +57,9 @@ const { Triangle, Circle, Square } = require('./lib/shapes');
             const loadContent = shape.render(data.text, data.textColour, data.shapeColour);
             await fs.writeFile(path.join(__dirname, 'examples', 'logo.svg'), loadContent);
             console.log('Generated logo.svg');
+             
     }
     
-run();
+run()
+.catch((err) => console.log(err));
+
