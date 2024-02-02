@@ -1,31 +1,30 @@
 const inquirer = require('inquirer');
 const fs = require('fs').promises;
 const path = require('path');
-const Triangle = require('./lib/shapes');
-const Circle = require('./lib/shapes');
-const Square = require('./lib/shapes');
+const { Triangle, Circle, Square } = require('./lib/shapes');
+// const Circle = require('./lib/shapes');
+// const Square = require('./lib/shapes');
 // Text, Text Colour, Shape, Shape Colour
 // Need parent class Shape, with Triangle, Circle, Square after
-// Needed to change this class because I couldn't have Shape class here and export it because I'm importing the shapes here already,
-// Causes issue of circular dependency
-class Logo {
-    constructor() {
-    }
-    run() {
-        return inquirer
+//Had to change to async function
+  async function run() {
+      const data = await inquirer
         .prompt([
             {
                 type: 'input',
                 name: 'text',
                 message: 'Enter up to three characters for the logo:',
                 validate: (input) => 
-                input.length <=3 ||
-                'Text must be up to three characters.'
+                input !== '' && input !== ' ' && input !== '  ' && input.length <=3 ||
+                'Text must be between one and three characters'
             }, 
             {
                 type: 'input',
                 name: 'textColour',
-                message: 'Enter a colour keyword for text (or hex):'
+                message: 'Enter a colour keyword for text (or hex):',
+                validate: (input) => 
+                input !== '' ||
+                'Please enter a colour for the text.'
             },
             {
                 type: 'list',
@@ -36,26 +35,28 @@ class Logo {
             {
                 type: 'input',
                 name: 'shapeColour',
-                message: 'Enter a colour keyword for shape (or hex):'
+                message: 'Enter a colour keyword for shape (or hex):',
+                validate: (input) => 
+                input !== '' ||
+                'Please enter a colour for the shape.'
             },
-        ])
-        .then(() => {
-            let shape = this.shape;
-            switch (this.shape) {
+        ]);
+
+            let shape;
+            switch (data.shape) {
               case 'Triangle':
-                shape = new Triangle(this.shapeColour, this.text, this.textColour);
+                shape = new Triangle(data.text, data.textColour, data.shapeColour);
                 break;
               case 'Circle':
-                shape = new Circle(this.shapeColour, this.text, this.textColour);
+                shape = new Circle(data.text, data.textColour, data.shapeColour);
                 break;
               case 'Square':
-                shape = new Square(this.shapeColour, this.text, this.textColour);
+                shape = new Square(data.text, data.textColour, data.shapeColour);
                 break;
             }
-        });
+            const loadContent = shape.render(data.text, data.textColour, data.shapeColour);
+            await fs.writeFile(path.join(__dirname, 'examples', 'logo.svg'), loadContent);
+            console.log('Generated logo.svg');
     }
     
-}
-const newLogo = new Logo();
-
-newLogo.run();
+run();
