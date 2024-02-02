@@ -4,10 +4,11 @@ const path = require('path');
 const Triangle = require('./lib/shapes');
 const Circle = require('./lib/shapes');
 const Square = require('./lib/shapes');
-
 // Text, Text Colour, Shape, Shape Colour
 // Need parent class Shape, with Triangle, Circle, Square after
-class Shape {
+// Needed to change this class because I couldn't have Shape class here and export it because I'm importing the shapes here already,
+// Causes issue of circular dependency
+class Logo {
     constructor() {
     }
     run() {
@@ -55,8 +56,6 @@ class Shape {
     }
     
 }
-const newLogo = new Shape();
+const newLogo = new Logo();
 
 newLogo.run();
-
-module.exports = Shape;
