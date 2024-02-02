@@ -2,8 +2,7 @@ const inquirer = require('inquirer');
 const fs = require('fs').promises;
 const path = require('path');
 const { Triangle, Circle, Square } = require('./lib/shapes');
-// const Circle = require('./lib/shapes');
-// const Square = require('./lib/shapes');
+
 // Text, Text Colour, Shape, Shape Colour
 // Need parent class Shape, with Triangle, Circle, Square after
 //Had to change to async function
